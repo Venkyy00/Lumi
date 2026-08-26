@@ -126,3 +126,14 @@ def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get
         "user" : db_user
     }
 
+@app.get("/users/search/")
+def search_user_email(email : str, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.email == email).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User with this email not found!")
+
+    return {
+        "Status" : "Success",
+        "user" : user
+    }
